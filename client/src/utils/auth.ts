@@ -2,15 +2,23 @@
 import { jwtDecode } from 'jwt-decode';
 
 interface UserToken {
-  name: string;
-  exp: number;
+  data: {
+    _id: string;
+    username: string;
+    email: string;
+  };
+  exp: number; 
 }
 
 // create a new class to instantiate for a user
 class AuthService {
   // get user data
   getProfile() {
-    return jwtDecode(this.getToken() || '');
+    const token = this.getToken();
+    if (!token) {
+      throw new Error('No token found');
+    }
+    return jwtDecode<UserToken>(token).data;
   }
 
   // check if user's logged in

@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -37,3 +36,13 @@ export const signToken = (username: string, email: string, _id: unknown) => {
 
   return jwt.sign(payload, secretKey, { expiresIn: '1h' });
 };
+
+export const verifyToken = (token: string) => {
+  const secretKey = process.env.JWT_SECRET_KEY || '';
+
+  return jwt.verify(token, secretKey) as JwtPayload;
+};
+// Compare this snippet from server/src/routes/index.ts:  
+// import { Router } from 'express';
+// import userRoutes from './user-routes';
+// import bookRoutes from './book-routes';
